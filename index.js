@@ -20,8 +20,8 @@ restService.get('/hook', function (req, res) {
             if (requestBody.result) {
                 speech = '';
 
-                if (requestBody.result.fulfillment) {
-                    speech += requestBody.result.fulfillment.speech;
+                if (requestBody.result.itemName) {
+                    speech += requestBody.result.itemName.speech;
                     speech += ' ';
                 }
 
