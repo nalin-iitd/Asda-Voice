@@ -1,11 +1,14 @@
-'use strict';
 
-const express = require('express');
-const bodyParser = require('body-parser');
+
+var express = require('express');
+var bodyParser = require('body-parser');
 var http = require('http');
 
-const restService = express();
+var restService = express();
 restService.use(bodyParser.json());
+restService.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 restService.post('/hook', function (req, res) {
 
@@ -17,7 +20,7 @@ restService.post('/hook', function (req, res) {
         var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.itemName ? req.body.result.parameters.itemName : "";
 
         console.log(req.body);
-        
+
         var recipeSearchTerm = '';
         var requestURL = '';
 
@@ -54,7 +57,7 @@ restService.post('/hook', function (req, res) {
             response.on('end', function () {
                 var parsed = JSON.parse(body);
                 str = parsed;
-               
+
                 return res.json({
                     speech: speech,
                     displayText: speech,
