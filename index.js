@@ -33,10 +33,27 @@ restService.get('/hook', function (req, res) {
 
         var appId = '0cc5117b';
         var appKey = '7fd6ee57ca3497bc04bf70a71a714a97';
-        var requestURL = 'http://api.yummly.com/v1/api/recipes?_app_id=' + appId + '&_app_key=' + appKey + '&q=onion+soup';
+        //var requestURL = 'http://api.yummly.com/v1/api/recipes?_app_id=' + appId + '&_app_key=' + appKey + '&q=onion+soup';
         //var requestURL = 'https://test-es.edamam.com/search?q=' + 'chicken';
         var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.itemName ? req.body.result.parameters.itemName : "Seems like some problem. Speak again."
+
+        var recipeSearchTerm = '';
+        var speechArr = speech.split(' ');
+
+        for (var i = 0; i < speechArr.length; i++) {
+            if (i < speechArr.length - 1) {
+                recipeSearchTerm += recipeSearchTerm + speechArr + "+";
+            } else if (i == speechArr.length - 1) {
+                recipeSearchTerm += recipeSearchTerm + speechArr;
+            }
+        }
+
+        var requestURL = 'http://api.yummly.com/v1/api/recipes?_app_id=' + appId + '&_app_key=' + appKey + '&q=onion+soup';
+        //var requestURL = 'https://test-es.edamam.com/search?q=' + 'chicken';
+
         console.log(requestURL);
+        console.log(speech);
+        console.log(recipeSearchTerm);
 
         var str = '';
 
@@ -48,19 +65,20 @@ restService.get('/hook', function (req, res) {
             });
             // After the response is completed, parse it and log it to the console
             response.on('end', function () {
+                console.log(requestURL);
                 var parsed = JSON.parse(body);
                 str = parsed;
                 console.log(str.totalMatchCount);
+                //handleResult(str.totalMatchCount);
+                return res.json({
+                    speech: speech,
+                    displayText: speech,
+                    source: 'apiai-webhook-sample'
+                });
             });
         })
 
         console.log('result: ', speech);
-
-        return res.json({
-            speech: speech,
-            displayText: speech,
-            source: 'apiai-webhook-sample'
-        });
     } catch (err) {
         console.error("Can't process request", err);
 
