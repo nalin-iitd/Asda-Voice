@@ -2,7 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
+var http = require('http');
 
 const restService = express();
 restService.use(bodyParser.json());
@@ -12,7 +12,7 @@ restService.get('/hook', function (req, res) {
     console.log('hook request');
 
     try {
-       // var speech = 'empty speech';
+        // var speech = 'empty speech';
 
         // if (req.body) {
         //     var requestBody = req.body;
@@ -31,7 +31,28 @@ restService.get('/hook', function (req, res) {
         //     }
         // }
 
+        var appId = '0cc5117b';
+        var appKey = '7fd6ee57ca3497bc04bf70a71a714a97';
+        var requestURL = 'http://api.yummly.com/v1/api/recipes?_app_id=' + appId + '&_app_key=' + appKey + '&q=onion+soup';
+        //var requestURL = 'https://test-es.edamam.com/search?q=' + 'chicken';
         var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.itemName ? req.body.result.parameters.itemName : "Seems like some problem. Speak again."
+        console.log(requestURL);
+
+        var str = '';
+
+        var apiResponse = http.get(requestURL, function (response) {
+            var body = '';
+
+            response.on('data', function (data) {
+                body += data;
+            });
+            // After the response is completed, parse it and log it to the console
+            response.on('end', function () {
+                var parsed = JSON.parse(body);
+                str = parsed;
+                console.log(str.totalMatchCount);
+            });
+        })
 
         console.log('result: ', speech);
 
