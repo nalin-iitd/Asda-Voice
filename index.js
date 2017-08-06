@@ -16,6 +16,8 @@ restService.post('/hook', function (req, res) {
         var appKey = '7fd6ee57ca3497bc04bf70a71a714a97';
         var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.itemName ? req.body.result.parameters.itemName : "";
 
+        console.log(req.body);
+        
         var recipeSearchTerm = '';
         var requestURL = '';
 
