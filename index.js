@@ -12,24 +12,26 @@ restService.get('/hook', function (req, res) {
     console.log('hook request');
 
     try {
-        var speech = 'empty speech';
+       // var speech = 'empty speech';
 
-        if (req.body) {
-            var requestBody = req.body;
+        // if (req.body) {
+        //     var requestBody = req.body;
 
-            if (requestBody.result) {
-                speech = '';
+        //     if (requestBody.result) {
+        //         speech = '';
 
-                if (requestBody.result.itemName) {
-                    speech += requestBody.result.itemName.speech;
-                    speech += ' ';
-                }
+        //         if (requestBody.result.itemName) {
+        //             speech += requestBody.result.itemName.speech;
+        //             speech += ' ';
+        //         }
 
-                if (requestBody.result.action) {
-                    speech += 'action: ' + requestBody.result.action;
-                }
-            }
-        }
+        //         if (requestBody.result.action) {
+        //             speech += 'action: ' + requestBody.result.action;
+        //         }
+        //     }
+        // }
+
+        var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.itemName ? req.body.result.parameters.itemName : "Seems like some problem. Speak again."
 
         console.log('result: ', speech);
 
